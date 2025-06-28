@@ -11,18 +11,18 @@ st.title("Georgia Drinking Water Dashboard")
 st.sidebar.title("Navigation")
 
 st.markdown("""
-# Welcome to Georgia's Drinking Water Dashboard
+# Welcome to Georgia's Drinking Water Assistant
 
-This application provides insights into Georgia's drinking water systems using data from
-the Safe Drinking Water Information System (SDWIS).
+Meet your intelligent water data assistant powered by AI to help you analyze Georgia's Safe Drinking Water Information System (SDWIS) data.
 
-## Key Features
+## What Can Your Assistant Do?
 
-- **For the Public**: Understand if your drinking water is safe
-- **For Operators**: Track notices and compliance tasks
-- **For Regulators**: Field kit for understanding water system status
+- **Run Complex Queries**: Ask questions like "Which water systems had the most violations in 2024?"
+- **Provide Data Insights**: Try "What's the relationship between system size and compliance rate?"
+- **Generate Visualizations**: Ask "Show me a map of systems with lead exceedances"
+- **Support All Stakeholders**: From helping residents check their water safety to assisting regulators with compliance monitoring
 
-### Use the sidebar to navigate to different sections.
+### Simply chat with your assistant or use the sidebar to navigate to specialized views.
 """)
 
 st.info("Select a page from the sidebar to explore data specific to your needs.")

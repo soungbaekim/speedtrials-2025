@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 import datetime
 
-# st.set_page_config(page_title="Regulator View", page_icon="🔍")
+st.set_page_config(page_title="Regulator View", page_icon="🔍")
 
 st.title("Regulator View: Field Analysis Kit")
 st.sidebar.header("Regulator View")

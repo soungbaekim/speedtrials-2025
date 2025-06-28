@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 import datetime
 
-# st.set_page_config(page_title="Operator View", page_icon="🔧")
+st.set_page_config(page_title="Operator View", page_icon="🔧")
 
 st.title("Operator View: Compliance Management")
 st.sidebar.header("Operator View")

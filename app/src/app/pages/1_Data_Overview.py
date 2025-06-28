@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 
-# st.set_page_config(page_title="Data Overview", page_icon="📊")
+st.set_page_config(page_title="Data Overview", page_icon="📊")
 
 st.title("Georgia Drinking Water Data Overview")
 st.sidebar.header("Data Overview")
