@@ -6,15 +6,17 @@ authors = [
     {name = "Soung Bae Kim",email = "sbkim@berkeley.edu"}
 ]
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.12,<4.0"
 dependencies = [
+    "asyncio (>=3.4.3,<4.0.0)",
     "streamlit (>=1.46.1,<2.0.0)",
     "watchdog (>=6.0.0,<7.0.0)",
     "psycopg2-binary (>=2.9.10,<3.0.0)",
     "sqlalchemy (>=2.0.41,<3.0.0)",
-    "langgraph (>=0.5.0,<0.6.0)",
-    "langchain-anthropic (>=0.3.16,<0.4.0)",
-    "langchain-openai (>=0.3.27,<0.4.0)"
+    "langgraph (>=0.4.8,<0.5.0)",
+    "langchain-openai (>=0.3.23,<0.4.0)",
+    "langchain (>=0.3.25,<0.4.0)",
+    "langchain-anthropic (>=0.3.15,<0.4.0)",
 ]
 
 [tool.poetry]

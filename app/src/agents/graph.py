@@ -3,8 +3,7 @@ from langgraph.graph.graph import CompiledGraph
 from langgraph.prebuilt import create_react_agent
 from langchain_openai import ChatOpenAI
 from langchain_anthropic import ChatAnthropic
-from sqlalchemy import Engine
-from src.postgres.postgres import PostgresClient
+from sqlalchemy import create_engine, Engine
 
 PROMPT = """
 You are a helpful assistant that can answer questions about the Safe Drinking Water Information System (SDWIS).
@@ -237,12 +236,12 @@ ENF_LAST_REPORTED_DATE	timestamp without time zone
 """
 
 def create_graph(engine: Engine) -> CompiledGraph: 
-    openai = ChatOpenAI(
-        model="gpt-4o",
-        temperature=0,
-        timeout=None,
-        max_retries=2,
-    )
+    # openai = ChatOpenAI(
+    #     model="gpt-4o",
+    #     temperature=0,
+    #     timeout=None,
+    #     max_retries=2,
+    # )
 
     claude = ChatAnthropic(
         model_name="claude-3-7-sonnet-latest",
@@ -262,14 +261,15 @@ def create_graph(engine: Engine) -> CompiledGraph:
 
         All rows will be returned so be careful with the size of the query since that will be fed back to the model.
         """
-        cur = engine.connect()
-        cur.execute(query)
-        rows = cur.fetchall()
+        # cur = engine.connect()
+        # cur.execute(query)
+        # rows = cur.fetchall()
 
-        if len(rows) > 100:
-            return (rows[:100], f"error:query was too large to return; only the first 100 rows are returned; full length: {len(rows)}.")
+        # if len(rows) > 100:
+        #     return (rows[:100], f"error:query was too large to return; only the first 100 rows are returned; full length: {len(rows)}.")
 
-        return (rows, "")
+        # return (rows, "")
+        return "not implemented"
 
     return create_react_agent(
         model=claude,
@@ -279,16 +279,18 @@ def create_graph(engine: Engine) -> CompiledGraph:
 
 
 async def main():
-    graph = await create_graph(create_connection())
+    engine = create_engine('postgresql://postgres:postgres@localhost:5432/postgres')   
+
+    graph = await create_graph(engine)
     # user_message = "how many male users do we have that have less than 25 likes?"
     # user_message = "what's the general trend of likes over time?"
     # user_message = "how many on hold users do we have? Can you also give a breakdown of those users? On hold users can be found in the `groups` table where they are in a certain group."
     # user_message = "how many on hold users do we have? How many of them are male/female?"
     # user_message = "give a break down of the number of users in a 50-mile radius around Los Angeles in the last week."
-    user_message = "Find me a user. His first name is Isaac. He lives in California. He's in his thirties. If you can't find the exact user, return a list of close matches. Don't spot till you have something. Return the user's id some basic info."
+    user_message = "What can you do?"
 
     # Run the agent
-    out = graph.invoke(
+    out = await graph.ainvoke(
         {"messages": [{"role": "user", "content": user_message}]},
         {"recursion_limit": 100},
         debug=True,
