@@ -281,7 +281,7 @@ def create_graph(engine: Engine) -> CompiledGraph:
 async def main():
     engine = create_engine('postgresql://postgres:postgres@localhost:5432/postgres')   
 
-    graph = await create_graph(engine)
+    graph = create_graph(engine)
     # user_message = "how many male users do we have that have less than 25 likes?"
     # user_message = "what's the general trend of likes over time?"
     # user_message = "how many on hold users do we have? Can you also give a breakdown of those users? On hold users can be found in the `groups` table where they are in a certain group."
@@ -290,7 +290,7 @@ async def main():
     user_message = "What can you do?"
 
     # Run the agent
-    out = await graph.ainvoke(
+    out = graph.invoke(
         {"messages": [{"role": "user", "content": user_message}]},
         {"recursion_limit": 100},
         debug=True,
