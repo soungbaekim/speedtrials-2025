@@ -23,7 +23,7 @@ items = [
 def main():
     for item in items:
         print(f"Loading {item.name}...")
-        df = pd.read_csv(item.location)
+        df = pd.read_csv(item.location, low_memory=False)
         engine = create_engine('postgresql://postgres:postgres@localhost:5432/postgres')
         df.to_sql(item.name, engine, if_exists='append', index=False)
 
