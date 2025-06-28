@@ -4,9 +4,16 @@ from langgraph.prebuilt import create_react_agent
 from langchain_openai import ChatOpenAI
 from langchain_anthropic import ChatAnthropic
 from sqlalchemy import create_engine, Engine
+from sqlalchemy import text
 
 PROMPT = """
 You are a helpful assistant that can answer questions about the Safe Drinking Water Information System (SDWIS).
+
+You are given access to tools which you will use to gather information about the data types in our databases and also check if the queries are valid.
+
+You have all the data in the system. If you don't think you have enough information about a question, you can use the tools to gather more information. Be sure to look thru all the tables and their schemas before giving up on a question. Feel free to make a couple more calls to get examples to get even more context about a table/schema.
+
+When using the `query_postgres` tool, be sure to only `SELECT` the columns you need since a large query will be fed back to the model. If you are exploring a table, using LIMIT so that the output isn't too big.
 
 # Tables
 This section contains the column types of all the tables in the database. They are the results of running:
@@ -232,6 +239,17 @@ ENF_ACTION_CATEGORY	text
 ENF_ORIGINATOR_CODE	text
 ENF_FIRST_REPORTED_DATE	timestamp without time zone
 ENF_LAST_REPORTED_DATE	timestamp without time zone
+
+# Final Response
+You're main goal is to answer the user's question. Be sure to use the tools to gather information about the data types in our databases and also check if the queries are valid.
+Be sure to run the query to answer the user's question with deep analysis and insights backed by the data.
+
+In addition, return the exact sql query you ran to answer the user's question and a quick summary of how you arrived at the answer.wha
+
+IMPORTANT: 
+- FOCUS ON MAKING THE SQL QUERY DO ALL THE WORK. DO NOT try to analyze the data by reading it. Instead, user `JOIN`s or `VIEWS` to achieve the exact aggregation of data you need.
+- DO NOT make up data. If you don't have enough information, FIRST try to find more information by using the tools. If you still don't have enough information, say so.
+- DO NOT give up if there is a syntax error. Try to fix the syntax error by trying different SQL queries.
 ```
 """
 
@@ -251,7 +269,7 @@ def create_graph(engine: Engine) -> CompiledGraph:
         stop=None,
     )
 
-    async def query_postgres(query: str) -> Tuple[Any, str]:  
+    def query_postgres(query: str) -> Tuple[Any, str]:  
         """Make a call to postgres with the given query.
         
         Args:
@@ -261,15 +279,15 @@ def create_graph(engine: Engine) -> CompiledGraph:
 
         All rows will be returned so be careful with the size of the query since that will be fed back to the model.
         """
-        # cur = engine.connect()
-        # cur.execute(query)
-        # rows = cur.fetchall()
+        # Connect and execute
+        with engine.connect() as conn:
+            result = conn.execute(text(query))
+            rows = result.fetchall()
 
-        # if len(rows) > 100:
-        #     return (rows[:100], f"error:query was too large to return; only the first 100 rows are returned; full length: {len(rows)}.")
+        if len(rows) > 100:
+            return (rows[:100], f"error:query was too large to return; only the first 100 rows are returned; full length: {len(rows)}.")
 
-        # return (rows, "")
-        return "not implemented"
+        return (rows, "")
 
     return create_react_agent(
         model=claude,
