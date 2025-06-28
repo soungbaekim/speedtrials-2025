@@ -270,7 +270,7 @@ def create_graph(engine: Engine) -> CompiledGraph:
     )
 
     def query_postgres(query: str) -> Tuple[Any, str]:  
-        """Make a call to postgres with the given query.
+        """Make a call to postgres with the given query. You are free to make any changes the database. However, be wary of changing existing data. Instead, create a new row or table.
         
         Args:
             query (str): The query to run on postgres.
