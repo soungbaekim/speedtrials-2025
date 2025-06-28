@@ -1,8 +1,7 @@
 .PHONY: up
 
 run:
-	cd app && \
-	poetry run streamlit run src/app/main.py
+	cd app && make run
 
 up:
 	docker-compose up --detach --build
